@@ -30,7 +30,7 @@ async function bootstrap() {
   const document = parse(DOC_API);
 
   SwaggerModule.setup('doc', app, document);
-  await app.listen(5000);
+  await app.listen(4000);
 }
 
 bootstrap();
