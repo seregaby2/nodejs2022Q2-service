@@ -19,18 +19,18 @@ import { updateArtistDto } from './dto/update-artist.dto';
 
 @Controller('artist')
 export class artistsController {
-  constructor(private artistsService: artistsService) {}
+  constructor(private artistService: artistsService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
   getAllArtist(): Promise<Artist[]> {
-    return this.artistsService.getAllArtists();
+    return this.artistService.getAllArtists();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getOne(@Param('id') id: string): Promise<Artist> {
-    const artist = await this.artistsService.getArtistById(id);
+    const artist = await this.artistService.getArtistById(id);
     if (!uuidValidate(id)) {
       throw new BadRequestException('Artist id is not valid');
     } else if (!artist) {
@@ -49,7 +49,7 @@ export class artistsController {
     ) {
       throw new BadRequestException('fill in the fields correctly');
     } else {
-      return this.artistsService.createArtist(createArtist);
+      return this.artistService.createArtist(createArtist);
     }
   }
 
@@ -59,7 +59,7 @@ export class artistsController {
     @Param('id') id: string,
     @Body() updateArtist: updateArtistDto,
   ): Promise<Artist> {
-    const artist: Artist = await this.artistsService.getArtistById(id);
+    const artist: Artist = await this.artistService.getArtistById(id);
     if (!uuidValidate(id)) {
       throw new BadRequestException('Artist id is not valid');
     } else if (!artist) {
@@ -71,20 +71,20 @@ export class artistsController {
     ) {
       throw new BadRequestException('fill in the fields correctly');
     } else {
-      return this.artistsService.updateArtist(id, updateArtist);
+      return this.artistService.updateArtist(id, updateArtist);
     }
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteArtist(@Param('id') id: string) {
-    const artist: Artist = await this.artistsService.getArtistById(id);
+    const artist: Artist = await this.artistService.getArtistById(id);
     if (!uuidValidate(id)) {
       throw new BadRequestException('Artist id is not valid');
     } else if (!artist) {
       throw new NotFoundException('Artist is not found');
     } else {
-      return this.artistsService.deleteArtist(id);
+      return this.artistService.deleteArtist(id);
     }
   }
 }
