@@ -6,16 +6,20 @@ import {
   IsUUID,
 } from 'class-validator';
 
-export class updateAlbumDto {
+export class createTrackDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
 
   @IsNotEmpty()
   @IsNumber()
-  readonly year: number;
+  readonly duration: number;
 
   @IsUUID()
   @IsOptional()
   readonly artistId: string | null;
+
+  @IsUUID()
+  @IsOptional()
+  readonly albumId: string | null;
 }

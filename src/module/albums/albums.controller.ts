@@ -10,7 +10,9 @@ import {
   Param,
   Post,
   Put,
+  ValidationPipe,
 } from '@nestjs/common';
+import { AlbumMessageError } from '../../../constants';
 import { validate as uuidValidate } from 'uuid';
 import { Album } from './albums.interface';
 import { albumsService } from './albums.service';
@@ -32,9 +34,9 @@ export class albumsController {
   async getOne(@Param('id') id: string): Promise<Album> {
     const album = await this.albumService.getAlbumById(id);
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Album id is not valid');
+      throw new BadRequestException(AlbumMessageError.NotValid);
     } else if (!album) {
-      throw new NotFoundException('Album is not found');
+      throw new NotFoundException(AlbumMessageError.NotFound);
     } else {
       return album;
     }
@@ -42,39 +44,23 @@ export class albumsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async createAlbum(@Body() createAlbum: createAlbumDto): Promise<Album> {
-    if (
-      !createAlbum.name ||
-      !createAlbum.year ||
-      typeof createAlbum.name !== 'string' ||
-      typeof createAlbum.year !== 'number'
-    ) {
-      throw new BadRequestException('fill in the fields correctly');
-    } else {
-      return this.albumService.createAlbum(createAlbum);
-    }
+  async createAlbum(
+    @Body(new ValidationPipe()) createAlbum: createAlbumDto,
+  ): Promise<Album> {
+    return this.albumService.createAlbum(createAlbum);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateAlbum(
-    @Body() updateAlbum: updateAlbumDto,
+    @Body(new ValidationPipe()) updateAlbum: updateAlbumDto,
     @Param('id') id: string,
   ): Promise<Album> {
     const album: Album = await this.albumService.getAlbumById(id);
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Album id is not valid');
+      throw new BadRequestException(AlbumMessageError.NotValid);
     } else if (!album) {
-      throw new NotFoundException('Album is not found');
-    } else if (
-      !updateAlbum.artistId ||
-      !updateAlbum.name ||
-      !updateAlbum.year ||
-      typeof updateAlbum.name !== 'string' ||
-      typeof updateAlbum.year !== 'number' ||
-      typeof updateAlbum.artistId !== ('string' || null)
-    ) {
-      throw new BadRequestException('fill in the fields correctly');
+      throw new NotFoundException(AlbumMessageError.NotFound);
     } else {
       return this.albumService.updateAlbum(id, updateAlbum);
     }
@@ -85,9 +71,9 @@ export class albumsController {
   async deleteArtist(@Param('id') id: string) {
     const album: Album = await this.albumService.getAlbumById(id);
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Album id is not valid');
+      throw new BadRequestException(AlbumMessageError.NotValid);
     } else if (!album) {
-      throw new NotFoundException('Album is not found');
+      throw new NotFoundException(AlbumMessageError.NotFound);
     } else {
       return this.albumService.deleteArtist(id);
     }

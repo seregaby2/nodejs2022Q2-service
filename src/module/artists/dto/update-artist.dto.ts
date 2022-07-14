@@ -1,5 +1,11 @@
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+
 export class updateArtistDto {
-  readonly id: string;
+  @IsString()
+  @IsNotEmpty()
   readonly name: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
   readonly grammy: boolean;
 }

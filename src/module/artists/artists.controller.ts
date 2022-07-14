@@ -10,7 +10,9 @@ import {
   Param,
   Post,
   Put,
+  ValidationPipe,
 } from '@nestjs/common';
+import { ArtistMessageError } from '../../../constants';
 import { validate as uuidValidate } from 'uuid';
 import { Artist } from './artista.interface';
 import { artistsService } from './artists.service';
@@ -32,9 +34,9 @@ export class artistsController {
   async getOne(@Param('id') id: string): Promise<Artist> {
     const artist = await this.artistService.getArtistById(id);
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Artist id is not valid');
+      throw new BadRequestException(ArtistMessageError.NotValid);
     } else if (!artist) {
-      throw new NotFoundException('Artist is not found');
+      throw new NotFoundException(ArtistMessageError.NotFound);
     } else {
       return artist;
     }
@@ -42,34 +44,23 @@ export class artistsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createArtist(@Body() createArtist: createArtistDto): Promise<Artist> {
-    if (
-      !createArtist.name ||
-      (!createArtist.grammy && createArtist.grammy !== false)
-    ) {
-      throw new BadRequestException('fill in the fields correctly');
-    } else {
-      return this.artistService.createArtist(createArtist);
-    }
+  createArtist(
+    @Body(new ValidationPipe()) createArtist: createArtistDto,
+  ): Promise<Artist> {
+    return this.artistService.createArtist(createArtist);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateArtist(
     @Param('id') id: string,
-    @Body() updateArtist: updateArtistDto,
+    @Body(new ValidationPipe()) updateArtist: updateArtistDto,
   ): Promise<Artist> {
     const artist: Artist = await this.artistService.getArtistById(id);
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Artist id is not valid');
+      throw new BadRequestException(ArtistMessageError.NotValid);
     } else if (!artist) {
-      throw new NotFoundException('Artist is not found');
-    } else if (
-      !updateArtist.name ||
-      typeof updateArtist.grammy !== 'boolean' ||
-      (!updateArtist.grammy && updateArtist.grammy !== false)
-    ) {
-      throw new BadRequestException('fill in the fields correctly');
+      throw new NotFoundException(ArtistMessageError.NotFound);
     } else {
       return this.artistService.updateArtist(id, updateArtist);
     }
@@ -80,9 +71,9 @@ export class artistsController {
   async deleteArtist(@Param('id') id: string) {
     const artist: Artist = await this.artistService.getArtistById(id);
     if (!uuidValidate(id)) {
-      throw new BadRequestException('Artist id is not valid');
+      throw new BadRequestException(ArtistMessageError.NotValid);
     } else if (!artist) {
-      throw new NotFoundException('Artist is not found');
+      throw new NotFoundException(ArtistMessageError.NotFound);
     } else {
       return this.artistService.deleteArtist(id);
     }
