@@ -16,21 +16,28 @@
 // }
 // bootstrap();
 
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 import { readFile } from 'fs/promises';
-import { dirname, join } from 'path';
+import { join } from 'path';
 import { parse } from 'yaml';
 import { AppModule } from './app.module';
 
+const PORT: string | number = process.env.PORT || 4000;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const rootDirname = dirname(__dirname);
+  app.useGlobalPipes(
+    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+  );
+
+  const rootDirname = process.cwd();
   const DOC_API = await readFile(join(rootDirname, 'doc', 'api.yaml'), 'utf-8');
   const document = parse(DOC_API);
 
   SwaggerModule.setup('doc', app, document);
-  await app.listen(4000);
+  await app.listen(PORT);
 }
 
 bootstrap();

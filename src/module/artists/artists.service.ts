@@ -43,6 +43,5 @@ export class artistsService {
 
   async deleteArtist(id: string): Promise<void> {
     this.artists = this.artists.filter((item) => item.id !== id);
-    console.log(this.artists, id);
   }
 }

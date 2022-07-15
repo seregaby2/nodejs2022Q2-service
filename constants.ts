@@ -12,3 +12,13 @@ export const AlbumMessageError = {
   NotValid: 'Album id is not valid',
   NotFound: 'Album is not found',
 };
+
+export const UserMessageError = {
+  NotValid: 'User id is not valid',
+  NotFound: 'User is not found',
+  Forbidden: 'Passwords do not match',
+};
+
+export const UserHelp = {
+  version: 1,
+};
