@@ -4,17 +4,17 @@ import { Album } from './albums.interface';
 
 @Injectable()
 export class albumsService {
-  albums: Album[] = [];
+  private static albums: Album[] = [];
   constructor() {
-    this.albums = [];
+    albumsService.albums = [];
   }
 
   async getAllAlbums(): Promise<Album[]> {
-    return this.albums;
+    return albumsService.albums;
   }
 
   async getAlbumById(id: string): Promise<Album> {
-    return this.albums.find((item) => item.id === id);
+    return albumsService.albums.find((item) => item.id === id);
   }
 
   async createAlbum(album: Album): Promise<Album> {
@@ -25,13 +25,13 @@ export class albumsService {
       artistId: album.artistId,
     };
 
-    this.albums.push(newAlbum);
+    albumsService.albums.push(newAlbum);
     return newAlbum;
   }
 
   async updateAlbum(id: string, changeData: Album): Promise<Album> {
     let index = -1;
-    this.albums.forEach((item, i) => {
+    albumsService.albums.forEach((item, i) => {
       if (item.id === id) {
         item.name = changeData.name;
         item.year = changeData.year;
@@ -39,10 +39,22 @@ export class albumsService {
         index = i;
       }
     });
-    return this.albums[index];
+    return albumsService.albums[index];
   }
 
   async deleteArtist(id: string): Promise<void> {
-    this.albums = this.albums.filter((item) => item.id !== id);
+    albumsService.albums = albumsService.albums.filter(
+      (item) => item.id !== id,
+    );
+  }
+
+  async artistIdSetNull(id: string) {
+    console.log('before', albumsService.albums, id);
+    albumsService.albums.find((e) => {
+      if (e.artistId === id) {
+        e.artistId = null;
+      }
+    });
+    console.log('after', albumsService.albums);
   }
 }

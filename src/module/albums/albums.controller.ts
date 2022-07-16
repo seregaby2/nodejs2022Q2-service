@@ -18,10 +18,16 @@ import { Album } from './albums.interface';
 import { albumsService } from './albums.service';
 import { createAlbumDto } from './dto/create-album.dto';
 import { updateAlbumDto } from './dto/update-album.dto';
+import { tracksService } from '../tracks/tracks.service';
+import { favoritesService } from '../favorites/favorites.service';
 
 @Controller('album')
 export class albumsController {
-  constructor(private albumService: albumsService) {}
+  constructor(
+    private albumService: albumsService,
+    private trackService: tracksService,
+    private favoriteService: favoritesService,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -68,14 +74,16 @@ export class albumsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteArtist(@Param('id') id: string) {
+  async deleteArtist(@Param('id') id: string): Promise<void> {
     const album: Album = await this.albumService.getAlbumById(id);
     if (!uuidValidate(id)) {
       throw new BadRequestException(AlbumMessageError.NotValid);
     } else if (!album) {
       throw new NotFoundException(AlbumMessageError.NotFound);
     } else {
-      return this.albumService.deleteArtist(id);
+      this.albumService.deleteArtist(id);
+      this.trackService.albumIdSetNull(id);
+      this.favoriteService.deleteFavouriteAlbum(id);
     }
   }
 }

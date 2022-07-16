@@ -18,10 +18,18 @@ import { Artist } from './artista.interface';
 import { artistsService } from './artists.service';
 import { createArtistDto } from './dto/create-artust.dto';
 import { updateArtistDto } from './dto/update-artist.dto';
+import { tracksService } from '../tracks/tracks.service';
+import { favoritesService } from '../favorites/favorites.service';
+import { albumsService } from '../albums/albums.service';
 
 @Controller('artist')
 export class artistsController {
-  constructor(private artistService: artistsService) {}
+  constructor(
+    private artistService: artistsService,
+    private trackService: tracksService,
+    private favoriteService: favoritesService,
+    private albumFavorite: albumsService,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -68,14 +76,17 @@ export class artistsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteArtist(@Param('id') id: string) {
+  async deleteArtist(@Param('id') id: string): Promise<void> {
     const artist: Artist = await this.artistService.getArtistById(id);
     if (!uuidValidate(id)) {
       throw new BadRequestException(ArtistMessageError.NotValid);
     } else if (!artist) {
       throw new NotFoundException(ArtistMessageError.NotFound);
     } else {
-      return this.artistService.deleteArtist(id);
+      this.artistService.deleteArtist(id);
+      this.trackService.artistIdSetNull(id);
+      this.favoriteService.deleteFavouriteArtit(id);
+      // this.albumFavorite.artistIdSetNull(id);
     }
   }
 }

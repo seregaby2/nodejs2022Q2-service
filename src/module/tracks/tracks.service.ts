@@ -4,17 +4,17 @@ import { Track } from './tracks.interface';
 
 @Injectable()
 export class tracksService {
-  tracks: Track[] = [];
+  private static tracks: Track[] = [];
   constructor() {
-    this.tracks = [];
+    tracksService.tracks = [];
   }
 
   async getAllTracks(): Promise<Track[]> {
-    return this.tracks;
+    return tracksService.tracks;
   }
 
   async getTrackById(id: string): Promise<Track> {
-    return this.tracks.find((item) => item.id === id);
+    return tracksService.tracks.find((item) => item.id === id);
   }
 
   async createTrack(dataTrack: Track): Promise<Track> {
@@ -25,13 +25,13 @@ export class tracksService {
       albumId: dataTrack.albumId,
       artistId: dataTrack.artistId,
     };
-    this.tracks.push(newTrack);
+    tracksService.tracks.push(newTrack);
     return newTrack;
   }
 
   async updateTrack(id: string, dataUpdate: Track): Promise<Track> {
     let index = -1;
-    this.tracks.forEach((e, i) => {
+    tracksService.tracks.forEach((e, i) => {
       if (e.id === id) {
         e.name = dataUpdate.name;
         e.duration = dataUpdate.duration;
@@ -40,10 +40,28 @@ export class tracksService {
         index = i;
       }
     });
-    return this.tracks[index];
+    return tracksService.tracks[index];
   }
 
   async deleteTrack(id: string) {
-    this.tracks = this.tracks.filter((e) => e.id !== id);
+    tracksService.tracks = tracksService.tracks.filter((e) => e.id !== id);
+  }
+
+  async artistIdSetNull(id: string) {
+    tracksService.tracks.map((e) => {
+      if (e.artistId === id) {
+        e.artistId = null;
+      }
+    });
+  }
+
+  async albumIdSetNull(id: string) {
+    console.log('beforeTrack', tracksService.tracks, id);
+    tracksService.tracks.map((e) => {
+      if (e.albumId === id) {
+        e.albumId = null;
+      }
+    });
+    console.log('afterTrack', tracksService.tracks, id);
   }
 }
