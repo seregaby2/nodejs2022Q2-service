@@ -17,6 +17,7 @@ export class favoritesService {
   }
 
   async getAllFavorites(): Promise<Favorites> {
+    console.log('fav', favoritesService.favorites);
     return favoritesService.favorites;
   }
 

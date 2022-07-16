@@ -56,12 +56,10 @@ export class tracksService {
   }
 
   async albumIdSetNull(id: string) {
-    console.log('beforeTrack', tracksService.tracks, id);
     tracksService.tracks.map((e) => {
       if (e.albumId === id) {
         e.albumId = null;
       }
     });
-    console.log('afterTrack', tracksService.tracks, id);
   }
 }

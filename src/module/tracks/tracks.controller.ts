@@ -18,10 +18,14 @@ import { createTrackDto } from './dto/create-track.dto';
 import { updateTrackDto } from './dto/update-track.dto';
 import { Track } from './tracks.interface';
 import { tracksService } from './tracks.service';
+import { favoritesService } from '../favorites/favorites.service';
 
 @Controller('track')
 export class tracksController {
-  constructor(private trackService: tracksService) {}
+  constructor(
+    private trackService: tracksService,
+    private favoriteService: favoritesService,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -72,6 +76,9 @@ export class tracksController {
     }
     if (!track) {
       throw new NotFoundException(TrackMessageError.NotFound);
-    } else this.trackService.deleteTrack(id);
+    } else {
+      this.trackService.deleteTrack(id);
+      this.favoriteService.deleteFavouriteTrack(id);
+    }
   }
 }

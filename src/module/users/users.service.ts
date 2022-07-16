@@ -56,7 +56,6 @@ export class usersService {
     updateData: updateUserDto,
   ): Promise<ResponseUser> {
     let index = -1;
-    console.log('pass', updateData.oldPassword, updateData.newPassword);
     this.users.map((e, i) => {
       if (e.id === id) {
         e.password = updateData.newPassword;

@@ -49,12 +49,10 @@ export class albumsService {
   }
 
   async artistIdSetNull(id: string) {
-    console.log('before', albumsService.albums, id);
     albumsService.albums.find((e) => {
       if (e.artistId === id) {
         e.artistId = null;
       }
     });
-    console.log('after', albumsService.albums);
   }
 }
