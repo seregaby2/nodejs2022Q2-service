@@ -1,7 +1,15 @@
-FROM node:16-alpine
+FROM node:lts-alpine
+
 WORKDIR /app
-COPY package.json .
-RUN npm install
+
+COPY package*.json .
+
+RUN npm prune --production
+
 COPY . .
-EXPOSE 4000
-CMD [ "npm", "start" ]
+
+RUN npm install
+
+EXPOSE ${PORT}
+
+CMD ["npm", "run", "start:dev"]
