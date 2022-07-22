@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { v4 as uuidv4 } from 'uuid';
 import { Artist } from './artista.interface';
 
 @Injectable()
 export class artistsService {
   private static artists: Artist[] = [];
-  constructor() {
+
+  constructor(private prisma: PrismaService) {
     artistsService.artists = [];
   }
 

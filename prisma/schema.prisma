@@ -1,0 +1,25 @@
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id String @id @unique @default(uuid()) @map("user_id")
+  login String @db.VarChar(256)
+  password String @db.VarChar(256)
+  version Int @default(1)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  @@map("users")
+}
+
+model Artist {
+  id String @id @default(uuid()) @map("artist_id")
+  name String @db.VarChar(50)
+  grammy Boolean
+  @@map("artists")
+}
