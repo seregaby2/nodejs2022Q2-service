@@ -1,15 +1,8 @@
-FROM node:lts-alpine
-
+FROM node:lts-alpine As dev
 WORKDIR /app
-
-COPY package*.json .
-
-RUN npm prune --production
-
+COPY package*.json ./
+RUN npm ci
 COPY . .
-
-RUN npm install
-
+RUN npx prisma generate
 EXPOSE ${PORT}
-
-CMD ["npm", "run", "start:dev"]
+CMD [ "npm", "run", "start:dev"]
