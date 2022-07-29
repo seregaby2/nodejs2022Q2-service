@@ -38,9 +38,4 @@ export class albumsService {
   async deleteAlbum(id: string) {
     return this.prisma.album.delete({ where: { id } });
   }
-
-  // async artistIdSetNull(id: string) {
-  //   const item = await this.prisma.album.findUnique({ where: { id } });
-  //   item.artistId = null;
-  // }
 }

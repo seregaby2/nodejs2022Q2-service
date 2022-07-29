@@ -18,16 +18,10 @@ import { Album } from './albums.interface';
 import { albumsService } from './albums.service';
 import { createAlbumDto } from './dto/create-album.dto';
 import { updateAlbumDto } from './dto/update-album.dto';
-import { tracksService } from '../tracks/tracks.service';
-import { favoritesService } from '../favorites/favorites.service';
 
 @Controller('album')
 export class albumsController {
-  constructor(
-    private albumService: albumsService,
-    private trackService: tracksService,
-    private favoriteService: favoritesService,
-  ) {}
+  constructor(private albumService: albumsService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
