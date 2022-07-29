@@ -78,7 +78,7 @@ export class tracksController {
       throw new NotFoundException(TrackMessageError.NotFound);
     } else {
       this.trackService.deleteTrack(id);
-      this.favoriteService.deleteFavouriteTrack(id);
+      // this.favoriteService.deleteFavouriteTrack(id);
     }
   }
 }

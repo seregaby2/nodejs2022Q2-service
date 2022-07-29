@@ -10,7 +10,8 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "generate:prisma": "npx prisma migrate dev --name init",
+    "start:dev": "nest start --watch && generate:prisma",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
     "docker": "docker-compose up --build",
@@ -22,6 +23,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "docker:scan:node": "docker scan nodejs2022q2-service_node",
     "docker:scan:postgres": "docker scan nodejs2022q2-service_postgres"
+    
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

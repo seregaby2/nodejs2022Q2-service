@@ -8,18 +8,52 @@ generator client {
 }
 
 model User {
-  id String @id @unique @default(uuid()) @map("user_id")
-  login String @db.VarChar(256)
-  password String @db.VarChar(256)
-  version Int @default(1)
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
-  @@map("users")
+  id String @id @default(uuid())
+  version Int @default(autoincrement())
+  createdAt Int
+  updatedAt Int
+  login String
+  password String
 }
 
 model Artist {
-  id String @id @default(uuid()) @map("artist_id")
-  name String @db.VarChar(50)
-  grammy Boolean
-  @@map("artists")
+  id String @id @default(uuid())
+  grammy Boolean @default(false)
+  tracks Track[]
+  albums Album[]
+  name String
+  Favorites Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId Int?
+  
+}
+
+model Album {
+  id       String  @id @default(uuid())
+  name     String
+  year     Int
+  Favorites Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId Int?
+  Artist Artist? @relation(fields: [artistId], references: [id])
+  artistId String?
+  tracks Track[]
+}
+
+model Track {
+  id       String  @id @default(uuid())
+  name     String
+  duration Int
+  Artist Artist? @relation(fields: [artistId], references: [id])
+  artistId String?
+  Favorites Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId Int?
+  Album Album? @relation(fields: [albumId], references: [id])
+  albumId  String?
+  
+}
+
+model Favorites {
+  id Int @id @default(0)
+  artists Artist[]
+  albums Album[]
+  tracks Track[]
 }

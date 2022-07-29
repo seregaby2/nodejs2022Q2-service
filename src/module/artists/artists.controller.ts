@@ -84,9 +84,9 @@ export class artistsController {
       throw new NotFoundException(ArtistMessageError.NotFound);
     } else {
       this.artistService.deleteArtist(id);
-      this.trackService.artistIdSetNull(id);
-      this.favoriteService.deleteFavouriteArtit(id);
-      this.albumFavorite.artistIdSetNull(id);
+      // this.trackService.artistIdSetNull(id);
+      // this.favoriteService.deleteFavouriteArtit(id);
+      // this.albumFavorite.artistIdSetNull(id);
     }
   }
 }

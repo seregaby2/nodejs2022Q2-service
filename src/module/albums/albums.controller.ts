@@ -81,9 +81,9 @@ export class albumsController {
     } else if (!album) {
       throw new NotFoundException(AlbumMessageError.NotFound);
     } else {
-      this.albumService.deleteArtist(id);
-      this.trackService.albumIdSetNull(id);
-      this.favoriteService.deleteFavouriteAlbum(id);
+      this.albumService.deleteAlbum(id);
+      // this.trackService.albumIdSetNull(id);
+      // this.favoriteService.deleteFavouriteAlbum(id);
     }
   }
 }
