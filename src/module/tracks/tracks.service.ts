@@ -5,10 +5,7 @@ import { Track } from './tracks.interface';
 
 @Injectable()
 export class tracksService {
-  private static tracks: Track[] = [];
-  constructor(private prisma: PrismaService) {
-    tracksService.tracks = [];
-  }
+  constructor(private prisma: PrismaService) {}
 
   async getAllTracks(): Promise<Track[]> {
     return this.prisma.track.findMany();

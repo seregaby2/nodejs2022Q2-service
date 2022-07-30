@@ -10,8 +10,8 @@ generator client {
 model User {
   id String @id @default(uuid())
   version Int @default(autoincrement())
-  createdAt Int
-  updatedAt Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   login String
   password String
 }
@@ -19,11 +19,12 @@ model User {
 model Artist {
   id String @id @default(uuid())
   grammy Boolean @default(false)
+  name String
+
   tracks Track[]
   albums Album[]
-  name String
-  Favorites Favorites? @relation(fields: [favoritesId], references: [id])
-  favoritesId Int?
+  Favorite Favorite? @relation(fields: [favoritesId], references: [id], onDelete: SetNull)
+  favoritesId String?
   
 }
 
@@ -31,9 +32,9 @@ model Album {
   id       String  @id @default(uuid())
   name     String
   year     Int
-  Favorites Favorites? @relation(fields: [favoritesId], references: [id])
-  favoritesId Int?
-  Artist Artist? @relation(fields: [artistId], references: [id])
+  Favorite Favorite? @relation(fields: [favoritesId], references: [id], onDelete: SetNull)
+  favoritesId String?
+  Artist Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull)
   artistId String?
   tracks Track[]
 }
@@ -42,17 +43,17 @@ model Track {
   id       String  @id @default(uuid())
   name     String
   duration Int
-  Artist Artist? @relation(fields: [artistId], references: [id])
+  Artist Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull)
   artistId String?
-  Favorites Favorites? @relation(fields: [favoritesId], references: [id])
-  favoritesId Int?
-  Album Album? @relation(fields: [albumId], references: [id])
+  Favorite Favorite? @relation(fields: [favoritesId], references: [id], onDelete: SetNull)
+  favoritesId String?
+  Album Album? @relation(fields: [albumId], references: [id], onDelete: SetNull)
   albumId  String?
   
 }
 
-model Favorites {
-  id Int @id @default(0)
+model Favorite {
+  id String   @id @default(uuid())
   artists Artist[]
   albums Album[]
   tracks Track[]
