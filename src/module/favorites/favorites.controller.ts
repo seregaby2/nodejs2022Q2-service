@@ -114,7 +114,7 @@ export class favoritesController {
     } else if (!artist) {
       throw new NotFoundException(ArtistMessageError.NotFound);
     } else {
-      return this.favoriteService.deleteFavouriteArtit(id);
+      await this.favoriteService.deleteFavouriteArtit(id);
     }
   }
 }

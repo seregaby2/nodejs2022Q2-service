@@ -27,7 +27,7 @@ export class usersController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllUsers(): Promise<ResponseUser[]> {
-    return this.userService.getAllUsers();
+    return await this.userService.getAllUsers();
   }
 
   @Get(':id')
@@ -48,7 +48,7 @@ export class usersController {
   async createUser(
     @Body(new ValidationPipe()) createUser: createUserDto,
   ): Promise<ResponseUser> {
-    return this.userService.createUser(createUser);
+    return await this.userService.createUser(createUser);
   }
 
   @Put(':id')
@@ -68,7 +68,7 @@ export class usersController {
       throw new NotFoundException(UserMessageError.NotFound);
     } else if (correctPassword) {
       throw new ForbiddenException(UserMessageError.Forbidden);
-    } else return this.userService.updateUser(id, updateUser);
+    } else return await this.userService.updateUser(id, updateUser);
   }
 
   @Delete(':id')
@@ -79,6 +79,6 @@ export class usersController {
       throw new BadRequestException(UserMessageError.NotValid);
     } else if (!user) {
       throw new NotFoundException(UserMessageError.NotFound);
-    } else return this.userService.deleteUser(id);
+    } else return await this.userService.deleteUser(id);
   }
 }

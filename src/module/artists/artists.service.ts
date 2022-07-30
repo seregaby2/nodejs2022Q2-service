@@ -32,6 +32,6 @@ export class artistsService {
   }
 
   async deleteArtist(id: string): Promise<void> {
-    this.prisma.artist.delete({ where: { id } });
+    await this.prisma.artist.delete({ where: { id } });
   }
 }

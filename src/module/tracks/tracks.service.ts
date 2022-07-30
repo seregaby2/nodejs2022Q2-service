@@ -31,6 +31,6 @@ export class tracksService {
   }
 
   async deleteTrack(id: string) {
-    this.prisma.track.delete({ where: { id } });
+    await this.prisma.track.delete({ where: { id } });
   }
 }
