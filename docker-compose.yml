@@ -1,0 +1,35 @@
+services:
+  node:
+    build: .
+    ports:
+    - ${PORT}:${PORT}
+    networks:
+      - my-net
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    environment:
+      - PORT=4000
+    volumes:
+      - ./:/app/
+      - /app/node_modules
+  
+  
+  postgres:
+    build: ./database/
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    restart: unless-stopped
+    networks:
+      - my-net
+    volumes:
+      - /var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+
+networks:
+  my-net:
+    name: my-net
