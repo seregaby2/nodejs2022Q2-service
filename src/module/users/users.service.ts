@@ -30,7 +30,7 @@ export class usersService {
     } else return null;
   }
 
-  async createUser(dataUser: UserCreate): Promise<ResponseUser> {
+  async createUser(dataUser: UserCreate): Promise<any> {
     const newUser: User = {
       id: uuidv4(),
       login: dataUser.login,
@@ -43,16 +43,13 @@ export class usersService {
     return {
       id: newUser.id,
       login: dataUser.login,
-      createdAt: newUser.createdAt,
-      updatedAt: newUser.updatedAt,
+      createdAt: +newUser.createdAt,
+      updatedAt: +newUser.updatedAt,
       version: UserHelp.version,
     };
   }
 
-  async updateUser(
-    id: string,
-    updateData: updateUserDto,
-  ): Promise<ResponseUser> {
+  async updateUser(id: string, updateData: updateUserDto): Promise<any> {
     await this.prisma.user.update({
       where: { id },
       data: {
@@ -65,8 +62,8 @@ export class usersService {
       id: id,
       login: user.login,
       version: user.version,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      createdAt: +user.createdAt,
+      updatedAt: +user.updatedAt,
     };
   }
 

@@ -96,7 +96,7 @@ export class favoritesService {
   async deleteFavouriteAlbum(id: string): Promise<void> {
     await this.prisma.album.update({
       where: { id: id },
-      data: { favoritesId: { set: null } },
+      data: { favoritesId: { set: null }, artistId: { set: null } },
     });
   }
 
