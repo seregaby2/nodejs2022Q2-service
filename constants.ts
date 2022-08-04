@@ -22,6 +22,12 @@ export const UserMessageError = {
   Forbidden: 'Passwords do not match',
 };
 
+export const AuthMessageError = {
+  NotValid: 'User id is not Found',
+  NotFound: 'User is not found',
+  Forbidden: 'Passwords do not match',
+};
+
 export const UserHelp = {
   version: 1,
 };

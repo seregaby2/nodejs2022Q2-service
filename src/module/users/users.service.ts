@@ -30,6 +30,15 @@ export class usersService {
     } else return null;
   }
 
+  async getUserByLogin(login: string): Promise<User> {
+    const user = await this.prisma.user.findMany({ where: { login } });
+    if (user[0]) {
+      return user[0];
+    } else {
+      return null;
+    }
+  }
+
   async createUser(dataUser: UserCreate): Promise<any> {
     const newUser: User = {
       id: uuidv4(),
